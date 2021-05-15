@@ -1,7 +1,5 @@
-import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 import time
 
 # url of the page we want to scrape
@@ -30,3 +28,4 @@ img = soup.find("img", {"class" : "styles__Image-uwktmu-7 cKdjfY LazyLoadImage__
 
 print(img.get("src"))
 
+driver.close()
