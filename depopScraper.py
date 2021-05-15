@@ -3,7 +3,7 @@ from selenium import webdriver
 import time
 
 # url of the page we want to scrape
-url = "https://www.depop.com/products/shoppixelchick-reversible-pisces-pendant/"
+url = input("Enter URL:")
 
 # initiating the webdriver. Parameter includes the path of the webdriver.
 driver = webdriver.Chrome('./chromedriver')
