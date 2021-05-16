@@ -41,11 +41,14 @@ def scrape_data(url):
     # close the web driver
     driver.close()
 
-    return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "');"
+    return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "', '" + sold + "');"
 
 
-def create_sql():
-    home = "https://www.depop.com/" + input("Enter your Depop username:") + "/"
+def create_sql(username):
+
+    commands = []
+
+    home = "https://www.depop.com/" + username
 
     driver = webdriver.Chrome('./chromedriver')
     driver.get(home)
@@ -67,19 +70,15 @@ def create_sql():
 
     urls = soup.find_all("a", {"data-testid" : "product__item"})
 
-    print("CREATE TABLE products (price varchar(255), src varchar(255), descr varchar(255)); ")
-
     for i in urls:
-        print(scrape_data("https://www.depop.com" + i.get("href")))
+        commands.append((scrape_data("https://www.depop.com" + i.get("href"))))
 
     driver.close()
 
-    print("ALTER TABLE `products` ORDER BY `price`;")
+    return commands
 
 
-'''
-create_sql()
-'''
+print("CREATE TABLE products (price varchar(255), src varchar(255), descr varchar(255), sold bit); ")
 
 app = Flask(__name__)
 
@@ -98,6 +97,9 @@ mycursor = mydatabase.cursor()
 
 @app.route('/button')
 def button():
+    for command in create_sql("shoppixelchick") :
+        mycursor.execute(command)
+    mycursor.execute('ALTER TABLE `products` ORDER BY `bit`;')
     mycursor.execute('SELECT * FROM products')
     data = mycursor.fetchall()
     return render_template('stock.html', output_data=data)
