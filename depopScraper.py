@@ -22,15 +22,17 @@ def scrape_data(url):
 
     description_html = soup.find(class_="Text-yok90d-0 styles__DescriptionContainer-uwktmu-9 bWcgji")
 
-    desc = description_html.contents[0]
+    desc = description_html.contents[0].encode("ascii", "ignore").decode()
 
     price_html = soup.find("span", {"data-testid": "fullPrice"})
 
     if soup.find("div", {"data-testid": "productPurchase"}).contents[0].contents[0] == "Sold":
-        price = "Sold"
+        sold = "1"
 
     else:
-        price = price_html.contents[0]
+        sold = "0"
+
+    price = price_html.contents[0]
 
     img = soup.find("img", {"class": "styles__Image-uwktmu-7 cKdjfY LazyLoadImage__Image-sc-1732jps-1 cSwkPp"})
 
@@ -39,7 +41,7 @@ def scrape_data(url):
     # close the web driver
     driver.close()
 
-    return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "');"
+    return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "', '" + sold + "');"
 
 
 def create_sql():
@@ -65,12 +67,14 @@ def create_sql():
 
     urls = soup.find_all("a", {"data-testid" : "product__item"})
 
-    print("CREATE TABLE products (price varchar(255), src varchar(255), descr varchar(255)); ")
+    print("CREATE TABLE products (price varchar(255), src varchar(255), descr varchar(255), sold bit); ")
 
     for i in urls:
         print(scrape_data("https://www.depop.com" + i.get("href")))
 
     driver.close()
+
+
 
 create_sql()
 
@@ -88,7 +92,7 @@ def button():
     return render_template('stock.html')
 
 
-"""
+'''
 if __name__ == '__main__':
     app.run()
-"""
+'''
