@@ -1,20 +1,18 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
-
-# url of the page we want to scrape
 from selenium.webdriver.common.keys import Keys
 
 home = input("Enter URL:")
 
 driver = webdriver.Chrome('./chromedriver')
 driver.get(home)
-# ensure the page loads image source (dynamic property)
+
 time.sleep(3)
 
 elem = driver.find_element_by_tag_name("body")
 
-no_of_pagedowns = 20
+no_of_pagedowns = 100
 
 while no_of_pagedowns:
     elem.send_keys(Keys.PAGE_DOWN)
