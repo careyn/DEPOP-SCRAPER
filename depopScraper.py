@@ -55,7 +55,7 @@ def scrape_data(url):
     # close the web driver
     driver.close()
 
-    return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "')"
+    return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "');"
 
 
 print("CREATE TABLE products (price int, src varchar(255), descr varchar(255)); ")
