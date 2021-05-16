@@ -20,15 +20,19 @@ def scrape_data(url):
 
     soup = BeautifulSoup(html, "html.parser")
 
-    descriptionHtml = soup.find(class_="Text-yok90d-0 styles__DescriptionContainer-uwktmu-9 bWcgji")
+    description_html = soup.find(class_="Text-yok90d-0 styles__DescriptionContainer-uwktmu-9 bWcgji")
 
-    desc = descriptionHtml.contents[0]
+    desc = description_html.contents[0]
 
-    priceHtml = soup.find("span", {"data-testid" : "fullPrice"})
+    price_html = soup.find("span", {"data-testid": "fullPrice"})
 
-    price = priceHtml.contents[0]
+    if soup.find("div", {"data-testid": "productPurchase"}).contents[0].contents[0] == "Sold":
+        price = "Sold"
 
-    img = soup.find("img", {"class" : "styles__Image-uwktmu-7 cKdjfY LazyLoadImage__Image-sc-1732jps-1 cSwkPp"})
+    else:
+        price = price_html.contents[0]
+
+    img = soup.find("img", {"class": "styles__Image-uwktmu-7 cKdjfY LazyLoadImage__Image-sc-1732jps-1 cSwkPp"})
 
     src = img.get("src")
 
@@ -38,7 +42,7 @@ def scrape_data(url):
     return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "');"
 
 
-def find_products():
+def create_sql():
     home = input("Enter depop home page URL:")
 
     driver = webdriver.Chrome('./chromedriver')
@@ -68,6 +72,8 @@ def find_products():
 
     driver.close()
 
+create_sql()
+
 
 app = Flask(__name__)
 
@@ -82,5 +88,7 @@ def button():
     return render_template('stock.html')
 
 
+"""
 if __name__ == '__main__':
     app.run()
+"""
