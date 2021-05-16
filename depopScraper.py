@@ -1,7 +1,12 @@
+import sys
+from flask import Flask, render_template, jsonify, request
+import test
 from bs4 import BeautifulSoup
 from selenium import webdriver
+import requests
 import time
 from selenium.webdriver.common.keys import Keys
+
 
 home = input("Enter URL:")
 
@@ -62,3 +67,14 @@ for i in urls:
     print(scrape_data("https://www.depop.com" + i.get("href")))
 
 driver.close()
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+
+if __name__ == '__main__':
+    app.run()
