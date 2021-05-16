@@ -8,29 +8,6 @@ import time
 from selenium.webdriver.common.keys import Keys
 
 
-home = input("Enter URL:")
-
-driver = webdriver.Chrome('./chromedriver')
-driver.get(home)
-
-time.sleep(1)
-
-elem = driver.find_element_by_tag_name("body")
-
-no_of_pagedowns = 100
-
-while no_of_pagedowns:
-    elem.send_keys(Keys.PAGE_DOWN)
-    time.sleep(0.2)
-    no_of_pagedowns-=1
-
-html = driver.page_source
-
-soup = BeautifulSoup(html, "html.parser")
-
-urls = soup.find_all("a", {"data-testid" : "product__item"})
-
-
 def scrape_data(url):
     # Open the chrome web driver
     driver = webdriver.Chrome('./chromedriver')
@@ -61,12 +38,36 @@ def scrape_data(url):
     return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "');"
 
 
-print("CREATE TABLE products (price varchar(255), src varchar(255), descr varchar(255)); ")
+def find_products():
+    home = input("Enter depop home page URL:")
 
-for i in urls:
-    print(scrape_data("https://www.depop.com" + i.get("href")))
+    driver = webdriver.Chrome('./chromedriver')
+    driver.get(home)
 
-driver.close()
+    time.sleep(1)
+
+    elem = driver.find_element_by_tag_name("body")
+
+    no_of_pagedowns = 100
+
+    while no_of_pagedowns:
+        elem.send_keys(Keys.PAGE_DOWN)
+        time.sleep(0.2)
+        no_of_pagedowns-=1
+
+    html = driver.page_source
+
+    soup = BeautifulSoup(html, "html.parser")
+
+    urls = soup.find_all("a", {"data-testid" : "product__item"})
+
+    print("CREATE TABLE products (price varchar(255), src varchar(255), descr varchar(255)); ")
+
+    for i in urls:
+        print(scrape_data("https://www.depop.com" + i.get("href")))
+
+    driver.close()
+
 
 app = Flask(__name__)
 
@@ -74,6 +75,11 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     return render_template('index.html')
+
+
+@app.route('/button')
+def button():
+    return render_template('stock.html')
 
 
 if __name__ == '__main__':
