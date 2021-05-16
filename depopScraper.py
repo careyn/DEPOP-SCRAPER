@@ -27,7 +27,8 @@ soup = BeautifulSoup(html, "html.parser")
 
 urls = soup.find_all("a", {"data-testid" : "product__item"})
 
-def scrapeData(url):
+
+def scrape_data(url):
     # Open the chrome web driver
     driver = webdriver.Chrome('./chromedriver')
     driver.get(url)
@@ -54,10 +55,12 @@ def scrapeData(url):
     # close the web driver
     driver.close()
 
-    return [price, src, desc]
+    return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "')"
 
+
+print("CREATE TABLE products (price int, src varchar(255), descr varchar(255)); ")
 
 for i in urls:
-    print(scrapeData("https://www.depop.com" + i.get("href")))
+    print(scrape_data("https://www.depop.com" + i.get("href")))
 
 driver.close()
