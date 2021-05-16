@@ -8,7 +8,7 @@ home = input("Enter URL:")
 driver = webdriver.Chrome('./chromedriver')
 driver.get(home)
 
-time.sleep(3)
+time.sleep(1)
 
 elem = driver.find_element_by_tag_name("body")
 
@@ -32,7 +32,7 @@ def scrape_data(url):
     driver.get(url)
 
     # ensure the page loads image source (dynamic property)
-    time.sleep(1)
+    time.sleep(0.3)
 
     html = driver.page_source
 
@@ -56,7 +56,7 @@ def scrape_data(url):
     return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "');"
 
 
-print("CREATE TABLE products (price int, src varchar(255), descr varchar(255)); ")
+print("CREATE TABLE products (price varchar(255), src varchar(255), descr varchar(255)); ")
 
 for i in urls:
     print(scrape_data("https://www.depop.com" + i.get("href")))
