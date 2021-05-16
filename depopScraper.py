@@ -43,7 +43,7 @@ def scrape_data(url):
 
 
 def create_sql():
-    home = input("Enter depop home page URL:")
+    home = "https://www.depop.com/" + input("Enter your Depop username:") + "/"
 
     driver = webdriver.Chrome('./chromedriver')
     driver.get(home)
