@@ -6,7 +6,7 @@ from selenium import webdriver
 import requests
 import time
 from selenium.webdriver.common.keys import Keys
-
+import mysql.connector
 
 def scrape_data(url):
     # Open the chrome web driver
@@ -41,7 +41,7 @@ def scrape_data(url):
     # close the web driver
     driver.close()
 
-    return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "', '" + sold + "');"
+    return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "');"
 
 
 def create_sql():
@@ -67,17 +67,19 @@ def create_sql():
 
     urls = soup.find_all("a", {"data-testid" : "product__item"})
 
-    print("CREATE TABLE products (price varchar(255), src varchar(255), descr varchar(255), sold bit); ")
+    print("CREATE TABLE products (price varchar(255), src varchar(255), descr varchar(255)); ")
 
     for i in urls:
         print(scrape_data("https://www.depop.com" + i.get("href")))
 
     driver.close()
 
+    print("ALTER TABLE `products` ORDER BY `price`;")
 
 
+'''
 create_sql()
-
+'''
 
 app = Flask(__name__)
 
@@ -87,12 +89,20 @@ def home():
     return render_template('index.html')
 
 
+mydatabase = mysql.connector.connect(
+    host = 'fdb30.awardspace.net', user = '3757480_tab',
+    passwd = 'tabular12', database = '3757480_tab')
+
+mycursor = mydatabase.cursor()
+
+
 @app.route('/button')
 def button():
-    return render_template('stock.html')
+    mycursor.execute('SELECT * FROM products')
+    data = mycursor.fetchall()
+    return render_template('stock.html', output_data=data)
 
 
-'''
 if __name__ == '__main__':
     app.run()
-'''
+
