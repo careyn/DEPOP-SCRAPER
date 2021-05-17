@@ -41,7 +41,7 @@ def scrape_data(url):
     # close the web driver
     driver.close()
 
-    return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "', '" + sold + "');"
+    return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "');"
 
 
 def create_sql(username):
@@ -89,17 +89,18 @@ def home():
 
 
 mydatabase = mysql.connector.connect(
-    host = 'fdb30.awardspace.net', user = '3757480_tab',
-    passwd = 'tabular12', database = '3757480_tab')
+    host = '127.0.0.1', user = 'root',
+    passwd = 'password', database = 'testing')
 
 mycursor = mydatabase.cursor()
 
 
 @app.route('/button')
 def button():
-    for command in create_sql("shoppixelchick") :
+    username = input("Enter your Depop username:")
+    for command in create_sql(username) :
+        print(command)
         mycursor.execute(command)
-    mycursor.execute('ALTER TABLE `products` ORDER BY `bit`;')
     mycursor.execute('SELECT * FROM products')
     data = mycursor.fetchall()
     return render_template('stock.html', output_data=data)
