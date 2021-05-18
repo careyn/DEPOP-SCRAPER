@@ -1,12 +1,10 @@
-import sys
-from flask import Flask, render_template, jsonify, request
-import test
+from flask import Flask, render_template
 from bs4 import BeautifulSoup
 from selenium import webdriver
-import requests
 import time
 from selenium.webdriver.common.keys import Keys
 import mysql.connector
+
 
 def scrape_data(url):
     # Open the chrome web driver
@@ -23,14 +21,9 @@ def scrape_data(url):
     description_html = soup.find(class_="Text-yok90d-0 styles__DescriptionContainer-uwktmu-9 bWcgji")
 
     desc = description_html.contents[0].encode("ascii", "ignore").decode()
+    desc = desc.replace("'", "")
 
     price_html = soup.find("span", {"data-testid": "fullPrice"})
-
-    if soup.find("div", {"data-testid": "productPurchase"}).contents[0].contents[0] == "Sold":
-        sold = "1"
-
-    else:
-        sold = "0"
 
     price = price_html.contents[0]
 
@@ -42,6 +35,14 @@ def scrape_data(url):
     driver.close()
 
     return "INSERT INTO products VALUES ('" + price + "', '" + src + "', '" + desc + "');"
+
+    '''
+        if soup.find("div", {"data-testid": "productPurchase"}).contents[0].contents[0] == "Sold":
+            sold = "1"
+
+        else:
+            sold = "0"
+    '''
 
 
 def create_sql(username):
@@ -77,6 +78,18 @@ def create_sql(username):
 
     return commands
 
+class Pdf():
+
+    def render_pdf(self, name, html):
+
+
+
+        pdf = StringIO()
+
+        pisa.CreatePDF(StringIO(html), pdf)
+
+        return pdf.getvalue()
+
 
 print("CREATE TABLE products (price varchar(255), src varchar(255), descr varchar(255), sold bit); ")
 
@@ -95,15 +108,17 @@ mydatabase = mysql.connector.connect(
 mycursor = mydatabase.cursor()
 
 
-@app.route('/button')
-def button():
-    username = input("Enter your Depop username:")
-    for command in create_sql(username) :
+@app.route('/button', defaults={'name': 'keef'})
+@app.route('/button/<name>/')
+def button(name):
+    mycursor.execute('DELETE FROM products;')
+    for command in create_sql(name) :
         print(command)
         mycursor.execute(command)
     mycursor.execute('SELECT * FROM products')
     data = mycursor.fetchall()
-    return render_template('stock.html', output_data=data)
+    html = render_template('stock.html', output_data=data)
+    return html
 
 
 if __name__ == '__main__':
