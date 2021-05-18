@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
@@ -78,18 +78,6 @@ def create_sql(username):
 
     return commands
 
-class Pdf():
-
-    def render_pdf(self, name, html):
-
-
-
-        pdf = StringIO()
-
-        pisa.CreatePDF(StringIO(html), pdf)
-
-        return pdf.getvalue()
-
 
 print("CREATE TABLE products (price varchar(255), src varchar(255), descr varchar(255), sold bit); ")
 
@@ -108,11 +96,12 @@ mydatabase = mysql.connector.connect(
 mycursor = mydatabase.cursor()
 
 
-@app.route('/button', defaults={'name': 'keef'})
-@app.route('/button/<name>/')
-def button(name):
+@app.route('/button')
+def button():
+    q = request.args.get("username")
+    d = str(q)
     mycursor.execute('DELETE FROM products;')
-    for command in create_sql(name) :
+    for command in create_sql(d) :
         print(command)
         mycursor.execute(command)
     mycursor.execute('SELECT * FROM products')
