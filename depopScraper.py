@@ -23,8 +23,8 @@ def scrape_data(url):
     description_html = soup.find(class_="Text-yok90d-0 styles__DescriptionContainer-uwktmu-9 bWcgji")
 
     # Clean the desc data by removing the <div> tag, removing non-ascii characters, and removing "'"
-    desc = description_html.contents[0].encode("ascii", "ignore").decode()
-    desc = desc.replace("'", "")
+    ''' desc = description_html.contents[0].encode("ascii", "ignore").decode() '''
+    desc = description_html.contents[0].replace("'", "")
 
     # Find text with price information
     price_html = soup.find("span", {"data-testid": "fullPrice"})
@@ -70,7 +70,7 @@ def create_sql(username):
     elem = driver.find_element_by_tag_name("body")
 
     # pagedown with selenium to ensure that we load every JS element that Depop stores
-    no_of_pagedowns = 100
+    no_of_pagedowns = 30
 
     while no_of_pagedowns:
         elem.send_keys(Keys.PAGE_DOWN)
