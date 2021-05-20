@@ -13,7 +13,7 @@ def scrape_data(url):
     driver.get(url)
 
     # ensure the page loads image source (dynamic property)
-    time.sleep(0.3)
+    time.sleep(0.5)
 
     html = driver.page_source
 
@@ -33,10 +33,10 @@ def scrape_data(url):
     price = price_html.contents[0]
 
     # Find the images that have the class representing product images
-    img = soup.find("img", {"class": "styles__Image-uwktmu-7 cKdjfY LazyLoadImage__Image-sc-1732jps-1 cSwkPp"})
+    img = soup.find("div", {"data-testid": "product__images"})
 
-    # pull the src from the <img>
-    src = img.get("src")
+    # pull the src from the <div> holding the <img>
+    src = img.contents[0].contents[0].get("src")
 
     # close the web driver
     driver.close()
@@ -74,7 +74,7 @@ def create_sql(username):
 
     while no_of_pagedowns:
         elem.send_keys(Keys.PAGE_DOWN)
-        time.sleep(0.2)
+        time.sleep(0.1)
         no_of_pagedowns -= 1
 
     html = driver.page_source

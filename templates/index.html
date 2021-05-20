@@ -6,7 +6,8 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style type = "text/css">
-      body {
+@import url(https://fonts.googleapis.com/css?family=Amatic+SC);
+body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center;
@@ -15,14 +16,25 @@
 	border-radius: 4px;
 	background-color: white;
 	border: white;
-	color: red;
+	color: black;
 	transition-duration: 0.4s;
-	padding: 10px 25px;
+	padding: 10px 24px;
+	font-family: 'Amatic SC';
+	font-size: 20px;
+    text-align: center;
+    font-weight: bold;
 }
 .button2:hover {
   background-color: white;
   color: black;
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+h2 {
+  font-family: 'Amatic SC';
+  text-align: center;
+  color:white;
+  font-size: 50px;
+  font-weight: bold;
 }
 input {
   text-align: center;
@@ -41,7 +53,7 @@ input {
     <div class="container h-100 d-flex justify-content-center align-items-center">
       <div class = "row">
         <div class = "col-lg-12">
-          <h2 style = "text-align: center; color:white;">Depop Summary Generator</h2>
+          <h2>Depop Summary Generator</h2>
 
           <br>
 
@@ -54,7 +66,7 @@ input {
             </div>
 
             <div class = "d-flex justify-content-center">
-             <button class = "button2" type="submit">View your summary!</button>
+             <button class = "button2" type="submit">Submit</button>
             </div>
           </form>
         </div>
