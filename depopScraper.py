@@ -70,7 +70,7 @@ def create_sql(username):
     elem = driver.find_element_by_tag_name("body")
 
     # pagedown with selenium to ensure that we load every JS element that Depop stores
-    no_of_pagedowns = 30
+    no_of_pagedowns = 100
 
     while no_of_pagedowns:
         elem.send_keys(Keys.PAGE_DOWN)
@@ -93,9 +93,6 @@ def create_sql(username):
     return commands
 
 
-# The table in the local database that we are appending to
-print("CREATE TABLE products (price varchar(255), src varchar(255), descr varchar(255)); ")
-
 app = Flask(__name__)
 
 
@@ -116,6 +113,8 @@ mycursor = mydatabase.cursor()
 # Finish by selecting all to return and rendering with our stock template
 @app.route('/button')
 def button():
+    # The table in the local database that we are appending to
+    print("CREATE TABLE products (price varchar(255), src LONGTEXT, descr LONGTEXT); ")
     q = request.args.get("username")
     d = str(q)
     mycursor.execute('DELETE FROM products;')
