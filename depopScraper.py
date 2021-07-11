@@ -5,8 +5,6 @@ import time
 from selenium.webdriver.common.keys import Keys
 import mysql.connector
 
-# Test commit dsfsdfsdf
-
 # Takes the data from an individual product's URL, returns the SQL statement to add it to products table
 def scrape_data(url):
     # Open the chrome web driver
